@@ -764,12 +764,6 @@ endif
 KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
 KBUILD_CFLAGS	+= $(call cc-option,-fno-allow-store-data-races)
 
-# Restore pre-gcc-10's params
-KBUILD_CFLAGS	+= $(call gcc-ifversion, -ge, 1000, --param=inline-min-speedup=15)
-KBUILD_CFLAGS	+= $(call gcc-ifversion, -ge, 1000, --param=max-inline-insns-single=200)
-KBUILD_CFLAGS	+= $(call gcc-ifversion, -ge, 1000, --param=max-inline-insns-auto=30)
-KBUILD_CFLAGS	+= $(call gcc-ifversion, -ge, 1000, --param=early-inlining-insns=14)
-
 # clang variable sanitization
 ifeq ($(call clang-ifversion, -ge, 0800, y),y)
 # Future support for zero initialization is still being debated, see
@@ -1302,15 +1296,9 @@ define filechk_utsrelease.h
 endef
 
 define filechk_version.h
-	(if [ $(SUBLEVEL) -gt 255 ]; then                                 \
-		echo \#define LINUX_VERSION_CODE $(shell                 \
-		expr $(VERSION) \* 65536 + 0$(PATCHLEVEL) \* 256 + 255); \
-	else                                                             \
-		echo \#define LINUX_VERSION_CODE $(shell                 \
-		expr $(VERSION) \* 65536 + 0$(PATCHLEVEL) \* 256 + $(SUBLEVEL)); \
-	fi;                                                              \
-	echo '#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) +  \
-	((c) > 255 ? 255 : (c)))';)
+	(echo \#define LINUX_VERSION_CODE $(shell                         \
+	expr $(VERSION) \* 65536 + 0$(PATCHLEVEL) \* 256 + 255); \
+	echo '#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))';)
 endef
 
 $(version_h): $(srctree)/Makefile FORCE
