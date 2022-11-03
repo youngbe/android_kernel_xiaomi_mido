@@ -41,8 +41,6 @@ enum sde_rot_dbg_evtlog_flag {
 	sde_rot_evtlog_tout_handler(false, __func__, ##__VA_ARGS__, \
 		SDE_ROT_EVTLOG_TOUT_DATA_LIMITER)
 
-void sde_rot_evtlog(const char *name, int line, int flag, ...);
-void sde_rot_evtlog_tout_handler(bool queue, const char *name, ...);
 
 struct sde_rotator_device;
 
@@ -63,6 +61,8 @@ struct dentry *sde_rotator_create_debugfs(
 		struct sde_rotator_device *rot_dev);
 
 void sde_rotator_destroy_debugfs(struct dentry *debugfs);
+void sde_rot_evtlog(const char *name, int line, int flag, ...);
+void sde_rot_evtlog_tout_handler(bool queue, const char *name, ...);
 #else
 static inline
 struct dentry *sde_rotator_create_debugfs(
@@ -73,6 +73,14 @@ struct dentry *sde_rotator_create_debugfs(
 
 static inline
 void sde_rotator_destroy_debugfs(struct dentry *debugfs)
+{
+}
+static inline
+void sde_rot_evtlog(const char *name, int line, int flag, ...)
+{
+}
+static inline
+void sde_rot_evtlog_tout_handler(bool queue, const char *name, ...)
 {
 }
 #endif

@@ -160,6 +160,8 @@ void mdss_misr_disable(struct mdss_data_type *mdata,
 void mdss_misr_crc_collect(struct mdss_data_type *mdata, int block_id,
 	bool is_video_mode);
 
+int mdss_dump_misr_data(char **buf, u32 size);
+
 int mdss_create_xlog_debug(struct mdss_debug_data *mdd);
 #if defined(CONFIG_FB_MSM_MDSS_FRC_DEBUG)
 int mdss_create_frc_debug(struct mdss_debug_data *mdd);
@@ -209,6 +211,8 @@ static inline void mdss_misr_disable(struct mdss_data_type *mdata,
 static inline void mdss_misr_crc_collect(struct mdss_data_type *mdata,
 					int block_id, bool is_video_mode) { }
 
+static inline int mdss_dump_misr_data(char **buf, u32 size){ return 0; }
+
 static inline int create_xlog_debug(struct mdss_data_type *mdata) { return 0; }
 static inline void mdss_xlog_dump(void) { }
 static inline void mdss_xlog(const char *name, int line, int flag, ...) { }
@@ -216,14 +220,12 @@ static inline void mdss_xlog(const char *name, int line, int flag, ...) { }
 static inline void mdss_dsi_debug_check_te(struct mdss_panel_data *pdata) { }
 static inline void mdss_xlog_tout_handler_default(bool queue,
 	const char *name, ...) { }
-u32 get_dump_range(struct dump_offset *range_node, size_t max_offset)
+static inline u32 get_dump_range(struct dump_offset *range_node, size_t max_offset)
 	{ return 0; }
-void mdss_dump_reg(const char *dump_name, u32 reg_dump_flag, char *addr,
+static inline void mdss_dump_reg(const char *dump_name, u32 reg_dump_flag, char *addr,
 	int len, u32 **dump_mem, bool from_isr) { }
-void mdss_mdp_debug_mid(u32 mid) { }
+static inline void mdss_mdp_debug_mid(u32 mid) { }
 #endif
-
-int mdss_dump_misr_data(char **buf, u32 size);
 
 static inline int mdss_debug_register_io(const char *name,
 		struct mdss_io_data *io_data, struct mdss_debug_base **dbg_blk)

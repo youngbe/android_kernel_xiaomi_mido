@@ -697,7 +697,18 @@ int mdss_dsi_phy_pll_reset_status(struct mdss_dsi_ctrl_pdata *ctrl);
 int mdss_dsi_panel_power_ctrl(struct mdss_panel_data *pdata, int power_state);
 void mdss_dsi_ctrl_phy_reset(struct mdss_dsi_ctrl_pdata *ctrl);
 
+#if defined(CONFIG_DEBUG_FS) && defined(CONFIG_FB_MSM_MDSS)
 void mdss_dsi_debug_bus_init(struct mdss_dsi_data *sdata);
+#else
+static inline void mdss_dsi_debug_bus_init(struct mdss_dsi_data *sdata)
+{
+	if (!sdata)
+		return;
+
+	sdata->dbg_bus = NULL;
+	sdata->dbg_bus_size = 0;
+}
+#endif
 
 static inline const char *__mdss_dsi_pm_name(enum dsi_pm_type module)
 {
